@@ -35,6 +35,12 @@ class Operation(object):
         """Compute the gradient of the operation."""
         raise NotImplementedError
 
+    def __add__(self, other):
+        return Add(self, other)
+
+    def __mul__(self, other):
+        return Multiply(self, other)
+
 
 class Add(Operation):
     def __init__(self, x, y, name=None):
@@ -60,6 +66,63 @@ class Add(Operation):
 def add(x, y, name=None):
     """Returns x + y element-wise."""
     return Add(x, y, name)
+
+
+class Multiply(Operation):
+    """Multiplication operation."""
+
+    def __init__(self, x, y, name=None):
+        """Multiplication constructor.
+
+        :param x: The first input node.
+        :type x: Object of `Operation`, `Variable` or `Placeholder`.
+
+        :param y: The second input node.
+        :type y: Object of `Operation`, `Variable` or `Placeholder`.
+
+        :param name: The operation name.
+        :type name: str.
+        """
+        super().__init__(x, y, name=name)
+
+    def compute_output(self):
+        x, y = self.input_nodes
+        self.output_value = np.multiply(x.output_value, y.output_value)
+        return self.output_value
+
+
+def multiply(x, y, name=None):
+    """Returns x * y element-wise."""
+    return Multiply(x, y, name)
+
+
+class MatMul(Operation):
+    """Matrix multiplication operation."""
+
+    def __init__(self, x, y, name=None):
+        """Matrix multiplication constructor.
+
+        :param x: The first input node.
+        :type x: Object of `Operation`, `Variable` or `Placeholder`.
+
+        :param y: The second input node.
+        :type y: Object of `Operation`, `Variable` or `Placeholder`.
+
+        :param name: The operation name.
+        :type name: str.
+        """
+        super().__init__(x, y, name=name)
+
+    def compute_output(self):
+        """Compute the output value of the matrix multiplication operation."""
+        x, y = self.input_nodes
+        self.output_value = np.dot(x.output_value, y.output_value)
+        return self.output_value
+
+
+def matmul(x, y, name=None):
+    """Returns the matrix multiplication of two arrays."""
+    return MatMul(x, y, name)
 
 
 class Variable(object):
@@ -116,6 +179,17 @@ class Constant(object):
             self.output_value = self.value
         return self.output_value
 
+    def __add__(self, other):
+        return Add(self, other)
+
+    def __mul__(self, other):
+        return Multiply(self, other)
+
+
+def constant(value, name=None):
+    """Create a constant node."""
+    return Constant(value, name=name)
+
 
 class Placeholder(object):
     """Placeholder node in computational graph. It has to be provided a value when
@@ -135,3 +209,14 @@ class Placeholder(object):
         self.graph = DEFAULT_GRAPH
         # Add to the currently active default graph.
         self.graph.placeholders.append(self)
+
+    def __add__(self, other):
+        return Add(self, other)
+
+    def __mul__(self, other):
+        return Multiply(self, other)
+
+
+def placeholder(name=None):
+    """Create a placeholder node."""
+    return Placeholder(name=name)

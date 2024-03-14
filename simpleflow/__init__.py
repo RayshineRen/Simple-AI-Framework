@@ -1,5 +1,6 @@
 from .graph import Graph
 from .operations import *
+from .session import Session
 
 # Create a default graph.
 import builtins

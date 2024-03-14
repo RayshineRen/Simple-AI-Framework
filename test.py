@@ -1,6 +1,10 @@
 import simpleflow as sf
 
 with sf.Graph().as_default():
-    a = sf.Constant([1.0, 2.0], name="a")
-    b = sf.Constant(2.0, name="b")
-    c = sf.add(a, b, name="c")
+    w = sf.constant([[1, 2, 3], [3, 4, 5]], name="w")
+    x = sf.constant([[9, 8], [7, 6], [10, 11]], name="x")
+    b = sf.constant(1.0, "b")
+    result = sf.matmul(w, x) + b
+    # Create a session to compute
+    with sf.Session() as sess:
+        print(sess.run(result))
