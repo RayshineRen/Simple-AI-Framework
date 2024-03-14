@@ -125,6 +125,53 @@ def matmul(x, y, name=None):
     return MatMul(x, y, name)
 
 
+class Negative(Operation):
+    """Negative operation."""
+
+    def __init__(self, x, name=None):
+        """Negative constructor.
+
+        :param x: The input node.
+        :type x: Object of `Operation`, `Variable` or `Placeholder`.
+
+        :param name: The operation name.
+        :type name: str.
+        """
+        super().__init__(x, name=name)
+
+    def compute_output(self):
+        """Compute the output value of the negative operation."""
+        x = self.input_nodes[0]
+        self.output_value = -x.output_value
+        return self.output_value
+
+
+class Square(Operation):
+    """Square operation."""
+
+    def __init__(self, x, name=None):
+        """Square constructor.
+
+        :param x: The input node.
+        :type x: Object of `Operation`, `Variable` or `Placeholder`.
+
+        :param name: The operation name.
+        :type name: str.
+        """
+        super().__init__(x, name=name)
+
+    def compute_output(self):
+        """Compute the output value of the square operation."""
+        x = self.input_nodes[0]
+        self.output_value = np.square(x.output_value)
+        return self.output_value
+
+
+def square(x, name=None):
+    """Returns the element-wise square of the input."""
+    return Square(x, name)
+
+
 class Variable(object):
     """Variable node in computational graph."""
 
@@ -156,6 +203,18 @@ class Variable(object):
             self.output_value = self.initial_value
         return self.output_value
 
+    def __add__(self, other):
+        return Add(self, other)
+
+    def __neg__(self):
+        return Negative(self)
+
+    def __sub__(self, other):
+        return Add(self, Negative(other))
+
+    def __mul__(self, other):
+        return Multiply(self, other)
+
 
 class Constant(object):
     """Constant node in computational graph."""
@@ -181,6 +240,12 @@ class Constant(object):
 
     def __add__(self, other):
         return Add(self, other)
+
+    def __neg__(self):
+        return Negative(self)
+
+    def __sub__(self, other):
+        return Add(self, Negative(other))
 
     def __mul__(self, other):
         return Multiply(self, other)
@@ -212,6 +277,12 @@ class Placeholder(object):
 
     def __add__(self, other):
         return Add(self, other)
+
+    def __neg__(self):
+        return Negative(self)
+
+    def __sub__(self, other):
+        return Add(self, Negative(other))
 
     def __mul__(self, other):
         return Multiply(self, other)
