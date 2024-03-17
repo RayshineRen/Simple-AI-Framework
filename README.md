@@ -12,3 +12,7 @@ simpleflow
   + Constant
     + 值不变
   + Placeholder
+
+前向传播图&反向传播图
+
+梯度下降法
