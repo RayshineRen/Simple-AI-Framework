@@ -37,4 +37,11 @@ simpleflow
 
 SimiliarFlow & SimilarTorch
 
+Operation重载的__mul__有区别，similarflow是matmul，相当于@，而simpleflow是element-wise的乘法。
+
+注意graph.py中的导入方式，否则会出现循环导入的问题。
+
+python -m exam_simiflow.test_ffd测试成功。
+
+
 ## 5.[PyTorch 的 Autograd](https://zhuanlan.zhihu.com/p/69294347)
