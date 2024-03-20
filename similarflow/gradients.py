@@ -19,7 +19,7 @@ def _add_gradient(op, grad):
     :param grad:
     :return:
     """
-    x, y = op.input_nodes
+    x, y = op.inputs[0], op.inputs[1]
 
     grad_wrt_x = grad
     while np.ndim(grad_wrt_x) > len(np.shape(x)):
@@ -45,7 +45,7 @@ def _matmul_gradient(op, grad):
     :param grad:
     :return:
     """
-    x, y = op.input_nodes
+    x, y = op.inputs[0], op.inputs[1]
     return [np.dot(grad, np.transpose(y)), np.dot(np.transpose(x), grad)]
 
 
@@ -69,7 +69,7 @@ def _softmax_gradient(op, grad):
 
 @RegisterGradient("log")
 def _log_gradient(op, grad):
-    x = op.input_nodes[0]
+    x = op.inputs[0]
     return grad / x
 
 
@@ -80,19 +80,19 @@ def _negative_gradient(op, grad):
 
 @RegisterGradient("multiply")
 def _multiply_gradient(op, grad):
-    x, y = op.input_nodes
+    x, y = op.inputs[0], op.inputs[1]
     return [grad * y, grad * x]
 
 
 @RegisterGradient("square")
 def _square_gradient(op, grad):
-    x = op.input_nodes[0]
+    x = op.inputs[0]
     return grad * np.multiply(2.0, x)
 
 
 @RegisterGradient("reduce_sum")
 def _reduce_sum_gradient(op, grad):
-    x = op.input_nodes[0]
+    x = op.inputs[0]
     output_shape = np.array(np.shape(x))
     output_shape[op.axis] = 1
     tile_scaling = np.shape(x) // output_shape
