@@ -37,11 +37,36 @@ simpleflow
 
 SimiliarFlow & SimilarTorch
 
-Operation重载的__mul__有区别，similarflow是matmul，相当于@，而simpleflow是element-wise的乘法。
++ SimilarFlow
+  + Operation重载的__mul__有区别，similarflow是matmul，相当于@，而simpleflow是element-wise的乘法。
+  + 注意graph.py中的导入方式，否则会出现循环导入的问题。
+  + python -m exam_simiflow.test_ffd测试成功。
++ SimilarTorch
 
-注意graph.py中的导入方式，否则会出现循环导入的问题。
+## 5.PyTorch原理
 
-python -m exam_simiflow.test_ffd测试成功。
+[PyTorch 的 Autograd](https://zhuanlan.zhihu.com/p/69294347)
 
+[一文搞懂 PyTorch 内部机制](https://zhuanlan.zhihu.com/p/338256656)
 
-## 5.[PyTorch 的 Autograd](https://zhuanlan.zhihu.com/p/69294347)
++ PyTorch的"三要素"：布局(layout)，设备(device)和数据类型(dtype)
+  + 设备类型(The device) 设备类型描述了tensor的到底存储在哪里，比如在CPU内存上还是在NVIDIA GPU显存上，在AMD GPU(hip)上还是在TPU(xla)上。不同设备的特征是它们有自己的存储分配器(allocator)，不同设备的分配器不能混用。
+  + 内存布局(The layout) 描述了我们如何解释这些物理内存。常见的布局是基于步长的tensor(strided tensor)。稀疏tensor有不同的内存布局，通常包含一对tensors，一个用来存储索引，一个用来存储数据；MKL-DNN tensors 可能有更加不寻常的布局，比如块布局(blocked layout)，这种布局难以被简单的步长(strides)表达。
+  + 数据类型(The dtype) 数据类型描述tensor中的每个元素如何被存储的，他们可能是浮点型或者整形，或者量子整形。
++ Tensor 是PyTorch的核心数据结构。
+  + 可以认为tensor包含了数据和元数据(metadata)，元数据用来描述tensor的大小、其包含内部数据的类型、存储的位置(CPU内存或是CUDA显存)
+  + Stride。Tensor是一个数学概念。当用计算机表示数学概念的时候，通常我们需要定义一种物理存储方式。最常见的表示方式是将Tensor中的每个元素按照次序连续的在内存中铺开(这是术语contiguous的来历)，将每一行写到相应内存位置里。步长用来将逻辑地址转化到物理内存的地址。当我们根据下标索引查找tensor中的任意元素时，将某维度的下标索引和对应的步长相乘，然后将所有维度乘积相加就可以了。
+  + 要取得tensor上的视图，我们得对tensor的的逻辑概念和tensor底层的物理数据(称为存储 storage)进行解耦。一个存储可能对应多个tensor。存储定义了tensor的数据类型和物理大小，而每个tensor记录了自己的大小(size)，步长(stride)和偏移(offset)，这些元素定义了该tensor如何对存储进行逻辑解释。
+  + tensor上的操作(operations)是如何实现的？当你调用`torch.mm`的时候，会产生两种分派(dispatch)：第一种分派基于设备类型(device type)和tensor的布局(layout of a tensor)，例如这个tensor是CPU tensor还是CUDA tensor；或者，这个tensor是基于步长的(strided) tensor 还是稀疏tensor。第二种分派基于tensor的数据类型(dtype)。这种依赖可以通过简单的`switch`语句解决。
+
+[PyTorch结构、架构分析_pytorch架构](https://blog.csdn.net/qq_28726979/article/details/120690343)
+
+[PyTorch JIT](https://zhuanlan.zhihu.com/p/370455320)
+
++ **TorchScript**
+  + [louis-she/torchscript-demos: A brief of TorchScript by MNIST](https://github.com/louis-she/torchscript-demos)
+
+## 6.Tensorflow-internals
+
+## 7.[PyTorch – Internal Architecture Tour](https://blog.christianperone.com/2018/03/pytorch-internal-architecture-tour/)
+
