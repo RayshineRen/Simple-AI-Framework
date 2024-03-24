@@ -196,6 +196,24 @@ vector-Jacobian积就是函数 $l$ 中关于 $\overline{x}$的梯度：
 $$
 \boldsymbol{J}^{T} \cdot \overline{v}
 $$
+$$
+\mathbf{v}^{T} \cdot J = \begin{bmatrix}
+\frac{\partial l}{\partial y_1} \cdots \frac{\partial l}{\partial y_m}
+\end{bmatrix} \begin{bmatrix}
+\frac{\partial y_1}{\partial x_1} \quad \cdots \quad \frac{\partial y_1}{\partial x_n} \\
+\vdots \quad \ddots \quad \vdots \\
+\frac{\partial y_m}{\partial x_1} \quad \cdots \quad \frac{\partial y_m}{\partial x_n}
+\end{bmatrix} = \begin{bmatrix}
+\frac{\partial l}{\partial x_1} \cdots \frac{\partial l}{\partial x_n}
+\end{bmatrix}
+$$
+
+反向传播过程中如果直接存储雅克比矩阵，会消耗大量存储空间。取而代之，如果只存储向量-雅克比的乘积，在减少存储的同时并不会阻碍导数的计算。因此，AI 框架在实现自动微分时，对每个中间层存储的都是向量-雅克比的乘积，而非雅克比矩阵。
+
+在实际的 AI 框架构建的计算图中，并不是把正向节点和反向节点融合在一张图，而是构建起一张大图包括正向和反向，或者是构建起两张图，一张正向的计算图，一张反向的计算图，通过输出节点把正反向计算图链接在一起。
+
+![image-20240325135734678](5-2 Autodiff.assets/image-20240325135734678.png)
+
 反向模式的优点：
 
 - 通过一次反向传输，就计算出所有偏导数，中间的偏导数计算只需计算一次
