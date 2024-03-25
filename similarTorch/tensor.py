@@ -1,5 +1,6 @@
 import numpy as np
 from typing import Type
+from .autograd import Autograd
 
 
 class Tensor:
@@ -35,3 +36,38 @@ class Tensor:
     def _op(cls, Op: Type[Autograd], *input_vars):
         f = Op()
         return f(*input_vars)
+
+    def __copy__(self):
+        copy = Tensor(np.copy(self.data), self.requires_grad)
+        try:
+            copy.grad[:] = self.grad[:]
+        except:
+            pass
+        return copy
+
+    def copy(self):
+        return self.__copy__()
+
+    def numpy(self):
+        return self.data.copy()
+
+    @property
+    def size(self):
+        return self.data.size
+
+    @property
+    def ndim(self):
+        return self.data.ndim
+
+    @property
+    def shape(self):
+        return self.data.shape
+
+    @property
+    def T(self):
+        copy = Tensor(np.copy(self.data.transpose()), self.requires_grad)
+        try:
+            copy.grad[:] = self.grad.transpose()[:]
+        except:
+            pass
+        return copy
