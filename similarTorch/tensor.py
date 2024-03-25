@@ -2,6 +2,7 @@ import numpy as np
 from typing import Type
 from .autograd import Autograd
 from similarTorch.nn.modules.mathematical import Add, Sub, Multiply, MatMul
+from similarTorch.nn.modules.manipulation import SwapAxes, Reshape
 
 
 class Tensor:
@@ -102,3 +103,11 @@ class Tensor:
         except:
             pass
         return copy
+
+    def swapaxes(self, axis1, axis2):
+        # return SwapAxes(axis1, axis2)(self)
+        return self._op(SwapAxes, self, axis1, axis2)
+
+    def reshape(self, *shape):
+        # return Reshape(*shape)(self)
+        return self._op(Reshape, self, *shape)
