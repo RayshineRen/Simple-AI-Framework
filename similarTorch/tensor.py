@@ -1,6 +1,7 @@
 import numpy as np
 from typing import Type
 from .autograd import Autograd
+from similarTorch.nn.modules.mathematical import Add, Sub, Multiply, MatMul
 
 
 class Tensor:
@@ -37,6 +38,33 @@ class Tensor:
         f = Op()
         return f(*input_vars)
 
+    def __str__(self):
+        return "<Tensor>\n" + self.data.__str__()
+
+    def __add__(self, other):
+        return self._op(Add, self, other)
+
+    def __radd__(self, other):
+        return self._op(Add, other, self)
+
+    def __sub__(self, other):
+        return self._op(Sub, self, other)
+
+    def __rsub__(self, other):
+        return self._op(Sub, other, self)
+
+    def __mul__(self, other):
+        return self._op(Multiply, self, other)
+
+    def __rmul__(self, other):
+        return self._op(Multiply, other, self)
+
+    def __matmul__(self, other):
+        return self._op(MatMul, self, other)
+
+    def __rmatmul__(self, other):
+        return self._op(MatMul, other, self)
+
     def __copy__(self):
         copy = Tensor(np.copy(self.data), self.requires_grad)
         try:
@@ -50,6 +78,9 @@ class Tensor:
 
     def numpy(self):
         return self.data.copy()
+
+    def __len__(self):
+        return len(self.data)
 
     @property
     def size(self):
