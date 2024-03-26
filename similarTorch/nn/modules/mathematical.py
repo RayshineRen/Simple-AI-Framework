@@ -1,5 +1,4 @@
 import numpy as np
-from ...autograd import Context
 from similarTorch.autograd import Autograd
 
 
@@ -20,11 +19,11 @@ class Sub(Autograd):
 
 
 class MatMul(Autograd):
-    def forward(self, ctx: Context, x, y):
+    def forward(self, ctx, x, y):
         ctx.save_for_backward(x, y)
         return x @ y
 
-    def backward(self, ctx: Context, grad: np.array):
+    def backward(self, ctx, grad: np.array):
         t1, t2 = ctx.data_for_back
         grad1 = grad @ np.swapaxes(t2, -1, -2)
         grad2 = np.swapaxes(t1, -1, -2) @ grad

@@ -10,11 +10,11 @@ def _calculate_fan_in_and_fan_out(tensor):
         )
 
     if dimensions == 2:  # Linear
-        fan_in = tensor.size(1)
-        fan_out = tensor.size(0)
+        fan_in = tensor.shape[1]
+        fan_out = tensor.shape[0]
     else:
-        num_input_fmaps = tensor.size(1)
-        num_output_fmaps = tensor.size(0)
+        num_input_fmaps = tensor.shape[1]
+        num_output_fmaps = tensor.shape[0]
         receptive_field_size = 1
         if tensor.dim() > 2:
             receptive_field_size = tensor[0][0].size()

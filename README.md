@@ -41,8 +41,13 @@ SimiliarFlow & SimilarTorch
   + Operation重载的__mul__有区别，similarflow是matmul，相当于@，而simpleflow是element-wise的乘法。
   + 注意graph.py中的导入方式，否则会出现循环导入的问题。
   + python -m exam_simiflow.test_ffd测试成功。
+  
 + SimilarTorch
-  + 
+
+  + 在similarTorch/nn/modules/linear.py中实现了Linear，测试文件中需要
+
+    ```import similarTorch.nn as nn```才能在调用nn.Linear使其callable，不能用```import similarTorch as st```再st.nn.Linear.
+
 
 ## 5.PyTorch原理
 

@@ -1,5 +1,6 @@
 from .linear import Linear
 from .init import kaiming_uniform_, uniform_, ones_, zeros_
+from .creation import zeros, ones, zeros_like, ones_like, empty, empty_like, rands
 from .activation import ReLU, Sigmoid, Softmax, Softplus, Softsign, ArcTan, Tanh
 from .manipulation import SwapAxes, Reshape, GetItem
 from .mathematical import (
@@ -44,4 +45,11 @@ __all__ = [
     "ones_",
     "zeros_",
     "Linear",
+    "zeros",
+    "ones",
+    "zeros_like",
+    "ones_like",
+    "empty",
+    "empty_like",
+    "rands",
 ]

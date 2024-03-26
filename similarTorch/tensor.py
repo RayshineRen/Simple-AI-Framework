@@ -16,7 +16,7 @@ class Tensor:
 
         self.backward_function = None
         self.backward_tensor = []
-        self.shape = self.data.shape
+        # self.shape = self.data.shape  # AttributeError: can't set attribute
 
     def backward(self, grad=np.array([1])):
         if self.requires_grad:
