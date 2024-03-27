@@ -7,7 +7,7 @@ from similarTorch.nn.modules.manipulation import SwapAxes, Reshape
 
 class Tensor:
     def __init__(self, data: np.ndarray, requires_grad: bool = False):
-        self.data = data
+        self.data = np.array(data)
         self.requires_grad = requires_grad
         self.grad = None
 

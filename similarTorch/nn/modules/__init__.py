@@ -53,4 +53,6 @@ __all__ = [
     "empty",
     "empty_like",
     "rands",
+    "MSELoss",
+    "CrossEntropyLoss",
 ]

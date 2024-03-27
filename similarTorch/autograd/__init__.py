@@ -15,7 +15,8 @@ class Autograd(ABC):
         ctx = Context()
         forward_tensor = self.forward(ctx, *map(lambda x: x.data, tensor_list))
         output_tensor = tensor.Tensor(forward_tensor, requires_grad=False)
-        output_tensor.backward_function = lambda x: self.backward(ctx, x)
+        # output_tensor.backward_function = lambda x: self.backward(ctx, x)
+        output_tensor.backward_function = self.backward
         output_tensor.backward_tensor = list(tensor_list)
         return output_tensor
 
