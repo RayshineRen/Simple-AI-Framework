@@ -2,6 +2,8 @@ from .linear import Linear
 from .init import kaiming_uniform_, uniform_, ones_, zeros_
 from .creation import zeros, ones, zeros_like, ones_like, empty, empty_like, rands
 from .activation import ReLU, Sigmoid, Softmax, Softplus, Softsign, ArcTan, Tanh
+from .container import Sequential
+from .flatten import Flatten
 from .loss import MSELoss, CrossEntropyLoss
 from .manipulation import SwapAxes, Reshape, GetItem
 from .mathematical import (
