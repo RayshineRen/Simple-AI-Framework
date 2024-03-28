@@ -4,7 +4,7 @@ from similarTorch.autograd import Autograd
 
 class ReLU(Autograd):
     def forward(self, ctx, x):
-        ctx.save_for_back(x)
+        ctx.save_for_backward(x)
         return np.clip(x, a_min=0, a_max=None)
 
     def backward(self, ctx, grad):
@@ -15,7 +15,7 @@ class ReLU(Autograd):
 class Sigmoid(Autograd):
     def forward(self, ctx, x):
         sig = 1 / (1 + np.exp(-x))
-        ctx.save_for_back(sig)
+        ctx.save_for_backward(sig)
         return sig
 
     def backward(self, ctx, grad):
@@ -26,7 +26,7 @@ class Sigmoid(Autograd):
 class Softmax(Autograd):
     def forward(self, ctx, x):
         softm = np.exp(x) / np.sum(np.exp(x), axis=-1, keepdims=True)
-        ctx.save_for_back(softm)
+        ctx.save_for_backward(softm)
         return softm
 
     def backward(self, ctx, grad):
@@ -37,7 +37,7 @@ class Softmax(Autograd):
 class Softplus(Autograd):
     # Softplus(x) = log(1 + exp(x))
     def forward(self, ctx, x):
-        ctx.save_for_back(1 + np.exp(-x))
+        ctx.save_for_backward(1 + np.exp(-x))
         return np.log(1 + np.exp(-x))
 
     def backward(self, ctx, grad):
@@ -48,7 +48,7 @@ class Softplus(Autograd):
 class Softsign(Autograd):
     # Softsign(x) = x / (1 + |x|)
     def forward(self, ctx, x):
-        ctx.save_for_back(1 + np.abs(x))
+        ctx.save_for_backward(1 + np.abs(x))
         return x / (1 + np.abs(x))
 
     def backward(self, ctx, grad):
@@ -58,7 +58,7 @@ class Softsign(Autograd):
 
 class ArcTan(Autograd):
     def forward(self, ctx, x):
-        ctx.save_for_back(x)
+        ctx.save_for_backward(x)
         return np.arctan(x)
 
     def backward(self, ctx, grad):
@@ -69,7 +69,7 @@ class ArcTan(Autograd):
 class Tanh(Autograd):
     def forward(self, ctx, x):
         tanh = np.tanh(x)
-        ctx.save_for_back(tanh)
+        ctx.save_for_backward(tanh)
         return tanh
 
     def backward(self, ctx, grad):

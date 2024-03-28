@@ -57,4 +57,6 @@ __all__ = [
     "rands",
     "MSELoss",
     "CrossEntropyLoss",
+    "Sequential",
+    "Flatten",
 ]
